@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./../globals.css"
 import Navigation from "../Components/Navigation";
 export const metadata: Metadata = {
-  title: "Login Page",
-  description: "Login page for the customers and admin",
+  title: "Forgot password",
+  description: "forgot password page is used to recover the account by verifing via email",
 };
 
 export default function RootLayout({
