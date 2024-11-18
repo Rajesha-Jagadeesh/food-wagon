@@ -22,11 +22,14 @@ export default function RegisterPage(props:{searchParams?:{role?: "restaurant" |
     }
   }, []);
   
-  const RegisterUser = (e:any):void =>{
+  const RegisterUser = (e:React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>):void =>{
     try {
       e.preventDefault();
-      const {email, password, name} = e.target.form.elements;
-      if (email.value.trim("") !== "" && password.value.trim("") && name.value.trim("") !== "") {
+      const form = e.target as HTMLFormElement;
+      const email = (form.form.elements.namedItem('email') as HTMLInputElement);
+      const password = (form.form.elements.namedItem('password') as HTMLInputElement);
+      const name = (form.form.elements.namedItem('name') as HTMLInputElement);
+      if (email.value !== "" && password.value && name.value !== "") {
         if(emailRegEx.test(email.value)){
           if (!agreeToTerms) {
             Swal.fire({
@@ -84,14 +87,16 @@ export default function RegisterPage(props:{searchParams?:{role?: "restaurant" |
           confirmButtonColor: "#000"
         })
       }
-    } catch (error) {
-      Swal.fire({
-        text: "An error occured, please try again later",
-        icon: "error",
-        showConfirmButton: true,
-        confirmButtonText: "OK",
-        confirmButtonColor: "#000"
-      })
+    } catch (error:unknown) {
+      if (error instanceof Error) {
+        Swal.fire({
+          text: "An error occured, please try again later",
+          icon: "error",
+          showConfirmButton: true,
+          confirmButtonText: "OK",
+          confirmButtonColor: "#000"
+        })
+      }
     }
   }
   

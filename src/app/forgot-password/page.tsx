@@ -1,7 +1,6 @@
 "use client"
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 import { emailRegEx } from "@/utils/utils";
 import { pageLoading } from "@/utils/SVG";
 import Swal from "sweetalert2";
@@ -17,10 +16,11 @@ export default function ForgotPasswordPage(){
     }
   }, [])
 
-  const ForgotPasswordEvent = (e:any):void =>{
+  const ForgotPasswordEvent = (e:React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>):void =>{
     e.preventDefault();
-    const {email} = e.target.form.elements;
-    if (email.value.trim("") !== "" && emailRegEx.test(email.value)) {
+    const form = e.target as HTMLFormElement;
+    const email = (form.form.elements.namedItem('email') as HTMLInputElement);
+    if (email.value !== "" && emailRegEx.test(email.value)) {
       Swal.fire({
         html: `<div class="flex justify-center">${pageLoading}</div>`,
         showConfirmButton: false,
@@ -35,7 +35,7 @@ export default function ForgotPasswordPage(){
             text: result.message,
             icon: result.success ? "success" : "error"
           })
-      })).catch(error=>{
+      })).catch(()=>{
         Swal.fire({
           text: "An error occured please try again",
           icon: "error",
@@ -62,7 +62,7 @@ export default function ForgotPasswordPage(){
         <div id="forgot-password-container" className="w-[445px] border-1 border-gray-400 p-4 rounded-2xl bg-primary max-w-[90dvw]">
           <form id="forgot-password-form" className="max-w-full" onSubmit={ForgotPasswordEvent}>
             <h1 className="form-title font-bold font-jost text-3xl">Forgot Password</h1>
-            <div className="text-context font-normal font-jost text-base">Enter your registered email address. we'll send you a an email to reset your password.</div>
+            <div className="text-context font-normal font-jost text-base">Enter your registered email address. we&apos;ll send you a an email to reset your password.</div>
             <div className="forgot-password-input-container mt-8 flex flex-col">
               <label htmlFor="email" className="text-sm font-jost ">Email Address <span className="text-red-600">*</span></label>
               <input type="email" name="email" className="outline-none border-1 border-primary rounded-xl p-4 w-full text-base font-jost font-semibold" />

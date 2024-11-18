@@ -4,7 +4,7 @@ import { emailRegEx } from "@/utils/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import Swal from "sweetalert2";
 const foodSlides = ["food-slider-1.png", "food-slider-2.png", "food-slider-3.png", "food-slider-4.png", "food-slider-5.png", "food-slider-6.png"]
 export default function LoginPage(){
@@ -20,10 +20,12 @@ export default function LoginPage(){
       clearInterval(sliderInterval)
     }
   }, [])
-  const LogginUser = (e:any):void =>{
+  const LogginUser = (e:React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>):void =>{
     e.preventDefault();
-    const {email, password} = e.target.form.elements;
-    if (email.value.trim("") !== "" && password.value.trim("")) {
+    const form = e.target as HTMLFormElement;
+    const email = (form.form.elements.namedItem('email') as HTMLInputElement);
+    const password = (form.form.elements.namedItem('password') as HTMLInputElement);
+    if (email.value !== "" && password.value !== "") {
       if(emailRegEx.test(email.value)){
         Swal.fire({
           html: `<div class="flex justify-center">${pageLoading}</div>`,

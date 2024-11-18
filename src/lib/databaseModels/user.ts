@@ -2,11 +2,11 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface DBUser extends Document {
   name: string;
   email: string;
-  id: Number;
+  id: number;
   basket: Array<
       {
-        sku: Number, 
-        quantity: Number, 
+        sku: number, 
+        quantity: number, 
         options: Array<
           {
             key: string,
@@ -18,8 +18,8 @@ export interface DBUser extends Document {
   role: Array<"customer" | "restaurant-admin">,
   subsidiary: string,
   isRestaurant: boolean,
-  orders: Array<Number>,
-  parent: Number,
+  orders: Array<number>,
+  parent: number,
   uid: string
 }
 export type USER = {
@@ -32,8 +32,8 @@ export type USER = {
   parent ? : number
   basket ? : Array<
     {
-      sku: Number, 
-      quantity: Number, 
+      sku: number, 
+      quantity: number, 
       options: Array<
         {
           key: string,

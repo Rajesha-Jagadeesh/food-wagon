@@ -31,7 +31,8 @@ export async function POST(request: NextRequest) {
     }else{
       return Response.json({success: false, message: "Required information is missing"})
     }
-  } catch (error:any) {
-    return Response.json({success: false, message: error.message})
+  } catch (error: unknown) {
+    if(error instanceof Error)
+      return Response.json({success: false, message: error.message})
   }
 }

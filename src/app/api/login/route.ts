@@ -4,6 +4,7 @@ import user from "@/lib/databaseModels/user";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { fireApp } from "@/lib/firestore";
 import { cookies } from "next/headers";
+import { FirebaseError } from "firebase/app";
 export async function POST(request: NextRequest) {
   const {email, password, rememberMe} = await request.json();
   if (email && password) {
@@ -22,11 +23,13 @@ export async function POST(request: NextRequest) {
         }else{
           return Response.json({success: false, message: "An error occurred while logging in"})
         }
-      } catch (error:any) {
-        if(error.name === "FirebaseError" && error.code === "auth/invalid-credential"){
-          return Response.json({success: false, message: "Invalid email or password"})
-        }else{
-          return Response.json({success: false, message: error.message || "An error occurred while logging in"})
+      } catch (error:unknown) {
+        if (error instanceof FirebaseError) {
+          if(error.name === "FirebaseError" && error.code === "auth/invalid-credential"){
+            return Response.json({success: false, message: "Invalid email or password"})
+          }else{
+            return Response.json({success: false, message: error.message || "An error occurred while logging in"})
+          }
         }
       }
       
@@ -38,7 +41,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request:NextRequest) {
+export async function GET() {
   const uid = cookies().get(process.env.NEXT_USER_COOKIE || "")?.value;
   if(uid){
     const loggedInUser = await user.findOne({uid: uid});
